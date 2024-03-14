@@ -2,3 +2,8 @@
 /.project
 /payloads/library/DumpCreds_2.0/PS/Invoke-M1m1d0gz.ps1
 bunny_connecter_config.txt
+.gitignore
+loot/
+version.txt
+win7-win8-cdc-acm.inf
+payloads/switch*

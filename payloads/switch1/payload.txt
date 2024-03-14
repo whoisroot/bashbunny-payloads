@@ -1,3 +1,43 @@
-# System default payload
-LED B SLOW
-ATTACKMODE SERIAL STORAGE
+# 
+# 
+# Title:             Notepad Fun 
+# Author:            The10FpsGuy and Mrhut10 
+#                    Big thanks to Mrhut10 for helping to put a loop in it :D 
+# Category:          Fun 
+# Target:.           Windows (Notepad) 
+# 
+#options 
+LED B G 100 
+msg_header="Repita e aprenda:" 
+msg_body="Vou lembrar de travar meu computador" 
+msg_body_repeats=10 
+msg_end="Por favor lembre de travar o computador quando sair." 
+ 
+ATTACKMODE HID VID_0x0461 PID_0x3F41
+Q GUI r 
+Q DELAY 150 
+Q STRING notepad.exe 
+Q ENTER 
+LED Y 500 
+ 
+Q DELAY 200 
+Q STRING $msg_header 
+Q ENTER 
+ 
+for (( i=1; i<=$msg_body_repeats; i++ )) 
+do 
+   Q STRING $msg_body 
+   Q ENTER 
+   sleep 50
+done
+sleep 150
+Q STRING $msg_end 
+Q ENTER
+Q GUI r 
+Q DELAY 400
+Q STRING https://fakeupdate.net/wnc/
+Q ENTER
+Q DELAY 200
+Q F11
+Q GUI l
+LED G 0 

